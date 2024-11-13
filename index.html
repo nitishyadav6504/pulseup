@@ -3,94 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulseUp - Creative Digital Agency</title>
+    <title>PulseUp - Digital Agency</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <!-- Add GSAP for animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-    <script src="script.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Add Locomotive Scroll for smooth scrolling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
 </head>
-<body>
-    <!-- Loader -->
-    <div class="loader">
-        <div class="loader-content">
-            <h2>PLEASE BE PATIENT</h2>
-            <div class="progress-bar">
-                <div class="progress"></div>
+<body data-scroll-container>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loading-text">
+            <h2>Welcome to PulseUp</h2>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
             </div>
+            <p class="loading-count">0%</p>
         </div>
     </div>
 
-    <!-- Navigation -->
+    <!-- Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Main Navigation -->
     <nav>
-        <div class="logo">
-            <h1>PulseUp</h1>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#work">Work</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <div class="menu-toggle">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="logo">PulseUp</div>
+        <div class="menu-items">
+            <a href="#work" data-scroll-to>Work</a>
+            <a href="#services" data-scroll-to>Services</a>
+            <a href="#contact" data-scroll-to>Contact</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="split-text">Designs that empower your brand</h1>
-            <p class="fade-in">Adding wings to your brand through sparkling ideas, holistic digital solutions, and extraordinary handcrafted designs.</p>
-            <div class="location-badge">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Digital Agency in New York</span>
-            </div>
+    <section class="hero" data-scroll-section>
+        <div class="hero-background">
+            <video autoplay muted loop playsinline>
+                <source src="assets/videos/hero-bg.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="hero-text">
+            <h1 data-scroll data-scroll-speed="2">We Create<br>Digital Magic</h1>
+            <p data-scroll data-scroll-speed="1.5">Transforming ideas into extraordinary digital experiences</p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
         </div>
     </section>
 
-    <!-- Work Showcase -->
-    <section id="work" class="work-showcase">
+    <!-- Featured Work -->
+    <section class="featured-work" id="work" data-scroll-section>
+        <div class="section-header">
+            <h2 data-scroll data-scroll-speed="1">Selected Works</h2>
+        </div>
         <div class="work-grid">
-            <div class="work-item">
-                <h2>Strategic branding that helps stand out!</h2>
-                <p>Transform your digital presence with our cutting-edge solutions and creative expertise.</p>
-                <a href="#" class="view-case">View Case</a>
+            <div class="work-item" data-scroll>
+                <div class="work-image">
+                    <img src="assets/images/project1.jpg" alt="Project 1">
+                </div>
+                <div class="work-info">
+                    <h3>Digital Strategy</h3>
+                    <p>Brand Development / UI Design / Development</p>
+                    <a href="#" class="view-project">View Project →</a>
+                </div>
             </div>
             <!-- Add more work items -->
         </div>
     </section>
 
-    <!-- Client Section -->
-    <section class="clients">
-        <h2>Our Happy Clients</h2>
-        <div class="client-logos">
-            <!-- Add client logos here -->
+    <!-- Services Section -->
+    <section class="services" id="services" data-scroll-section>
+        <div class="services-grid">
+            <div class="service-item" data-scroll>
+                <h3>01</h3>
+                <h4>Digital Strategy</h4>
+                <p>We craft comprehensive digital strategies that align with your business goals.</p>
+            </div>
+            <div class="service-item" data-scroll>
+                <h3>02</h3>
+                <h4>Brand Design</h4>
+                <p>Creating memorable brand identities that resonate with your audience.</p>
+            </div>
+            <div class="service-item" data-scroll>
+                <h3>03</h3>
+                <h4>Development</h4>
+                <p>Building robust digital solutions with cutting-edge technologies.</p>
+            </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <h2>Ready to start your project?</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Get in touch</h3>
-                <p>agency@pulseup.com</p>
-                <p>+1 (555) 123-4567</p>
-                <address>123 Digital Avenue, New York, NY 10001</address>
-            </div>
-            <form class="contact-form">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Tell us about your project" required></textarea>
-                <button type="submit" class="submit-button">Let's Create Together</button>
-            </form>
+    <section class="contact" id="contact" data-scroll-section>
+        <div class="contact-header">
+            <h2 data-scroll data-scroll-speed="1">Start a Project</h2>
         </div>
+        <form class="contact-form" data-scroll>
+            <div class="form-group">
+                <input type="text" required>
+                <label>Your Name</label>
+                <span class="line"></span>
+            </div>
+            <div class="form-group">
+                <input type="email" required>
+                <label>Your Email</label>
+                <span class="line"></span>
+            </div>
+            <div class="form-group">
+                <textarea required></textarea>
+                <label>Your Message</label>
+                <span class="line"></span>
+            </div>
+            <button type="submit">
+                <span>Send Message</span>
+                <div class="button-arrow">→</div>
+            </button>
+        </form>
     </section>
+
+    <!-- Footer -->
+    <footer data-scroll-section>
+        <div class="footer-content">
+            <div class="footer-left">
+                <h2>PulseUp</h2>
+                <p>Digital Agency</p>
+            </div>
+            <div class="footer-right">
+                <div class="social-links">
+                    <a href="#" target="_blank">Instagram</a>
+                    <a href="#" target="_blank">Twitter</a>
+                    <a href="#" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
