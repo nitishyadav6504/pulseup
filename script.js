@@ -205,3 +205,50 @@ window.addEventListener('resize', () => {
         scroll.update();
     }, 250);
 });
+
+// Magnetic button effect
+document.querySelectorAll('.magnetic-button').forEach(button => {
+    button.addEventListener('mousemove', (e) => {
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const deltaX = (x - centerX) * 0.2;
+        const deltaY = (y - centerY) * 0.2;
+        
+        button.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    });
+    
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'translate(0, 0)';
+    });
+});
+
+// Enhanced scroll animations
+scroll.on('scroll', (args) => {
+    // Parallax for hero section
+    const hero = document.querySelector('.hero');
+    const scrolled = args.scroll.y;
+    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    
+    // Fade out hero content based on scroll
+    const heroContent = document.querySelector('.hero-text');
+    heroContent.style.opacity = 1 - (scrolled * 0.002);
+});
+
+// Add smooth reveal for work items
+gsap.utils.toArray('.work-item').forEach(item => {
+    gsap.from(item, {
+        scrollTrigger: {
+            trigger: item,
+            start: "top bottom",
+            end: "top center",
+            scrub: 1
+        },
+        y: 100,
+        opacity: 0
+    });
+});
