@@ -8,81 +8,132 @@ const scroll = new LocomotiveScroll({
 });
 
 // Custom Cursor
-const cursor = document.querySelector('.cursor');
-const cursorFollower = document.querySelector('.cursor-follower');
+const cursor = document.querySelector('.custom-cursor');
+const follower = document.querySelector('.cursor-follower');
+let mouseX = 0;
+let mouseY = 0;
+let cursorX = 0;
+let cursorY = 0;
+let followerX = 0;
+let followerY = 0;
 
+// Update mouse position
 document.addEventListener('mousemove', (e) => {
-    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-    cursorFollower.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 });
 
-// Cursor hover effect for clickable elements
-const hoverElements = document.querySelectorAll('a, button, .work-item');
+// Animate cursor
+function animateCursor() {
+    // Smooth cursor movement
+    cursorX += (mouseX - cursorX) * 0.2;
+    cursorY += (mouseY - cursorY) * 0.2;
+    cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+
+    // Smooth follower movement
+    followerX += (mouseX - followerX) * 0.1;
+    followerY += (mouseY - followerY) * 0.1;
+    follower.style.transform = `translate(${followerX}px, ${followerY}px)`;
+
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Add hover effect for interactive elements
+const hoverElements = document.querySelectorAll('a, button, .work-item, input, textarea');
 hoverElements.forEach(element => {
     element.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(1.5)';
-        cursorFollower.style.transform = 'scale(1.5)';
+        cursor.classList.add('cursor-hover');
+        follower.classList.add('follower-hover');
     });
     
     element.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        cursorFollower.style.transform = 'scale(1)';
+        cursor.classList.remove('cursor-hover');
+        follower.classList.remove('follower-hover');
     });
 });
 
-// Loading Screen Animation
-window.addEventListener('load', () => {
-    const loader = document.querySelector('.loading-screen');
-    const progressBar = document.querySelector('.progress-bar');
-    const loadingCount = document.querySelector('.loading-count');
+// Hide cursor when leaving window
+document.addEventListener('mouseleave', () => {
+    cursor.style.opacity = '0';
+    follower.style.opacity = '0';
+});
+
+document.addEventListener('mouseenter', () => {
+    cursor.style.opacity = '1';
+    follower.style.opacity = '1';
+});
+
+// Loading Screen Handler
+document.addEventListener('DOMContentLoaded', () => {
+    const loadingScreen = document.querySelector('.loading-screen');
+    const loadingProgress = document.querySelector('.loading-progress');
+    const loadingText = document.querySelector('.loading-text');
+    const contentWrapper = document.querySelector('.content-wrapper');
     let progress = 0;
-    
-    const interval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress > 100) progress = 100;
-        
-        progressBar.style.width = `${progress}%`;
-        loadingCount.textContent = `${Math.round(progress)}%`;
-        
-        if (progress === 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    // Start page animations
-                    initPageAnimations();
-                }, 1000);
-            }, 500);
+    let resources = [];
+
+    // Collect all resources that need to be loaded
+    resources = [
+        ...Array.from(document.images),
+        ...Array.from(document.getElementsByTagName('video')),
+        ...Array.from(document.getElementsByTagName('link')),
+        ...Array.from(document.getElementsByTagName('script'))
+    ];
+
+    let loadedResources = 0;
+
+    // Function to update loading progress
+    const updateProgress = () => {
+        loadedResources++;
+        progress = (loadedResources / resources.length) * 100;
+        loadingProgress.style.width = `${progress}%`;
+        loadingText.textContent = `${Math.round(progress)}%`;
+
+        if (loadedResources === resources.length) {
+            finishLoading();
         }
-    }, 100);
+    };
+
+    // Track loading of resources
+    resources.forEach(resource => {
+        if (resource.complete) {
+            updateProgress();
+        } else {
+            resource.addEventListener('load', updateProgress);
+            resource.addEventListener('error', updateProgress); // Handle failed loads
+        }
+    });
+
+    // Minimum loading time of 2 seconds
+    setTimeout(() => {
+        if (progress < 100) {
+            progress = 100;
+            finishLoading();
+        }
+    }, 2000);
+
+    // Function to finish loading
+    function finishLoading() {
+        loadingProgress.style.width = '100%';
+        loadingText.textContent = '100%';
+        
+        setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            contentWrapper.classList.add('loaded');
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                initializeAnimations(); // Start your page animations
+            }, 500);
+        }, 500);
+    }
 });
 
-// Initialize Page Animations
-function initPageAnimations() {
-    // Hero Section Animation
-    gsap.from('.hero-text h1', {
-        y: 100,
-        opacity: 0,
-        duration: 1.5,
-        ease: 'power4.out'
-    });
-    
-    gsap.from('.hero-text p', {
-        y: 50,
-        opacity: 0,
-        duration: 1.5,
-        delay: 0.5,
-        ease: 'power4.out'
-    });
-    
-    gsap.from('.scroll-indicator', {
-        y: 50,
-        opacity: 0,
-        duration: 1.5,
-        delay: 1,
-        ease: 'power4.out'
-    });
+// Wrap your existing initialization code in this function
+function initializeAnimations() {
+    // Your existing animation code here
+    // (GSAP animations, cursor initialization, etc.)
 }
 
 // Scroll Animations
@@ -194,7 +245,7 @@ document.querySelector('.contact-form').addEventListener('submit', function(e) {
 // Update cursor on window resize
 window.addEventListener('resize', () => {
     cursor.style.transition = 'none';
-    cursorFollower.style.transition = 'none';
+    follower.style.transition = 'none';
 });
 
 // Refresh Locomotive Scroll on window resize
