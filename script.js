@@ -1,60 +1,86 @@
+// Initialize GSAP
+gsap.registerPlugin(ScrollTrigger);
+
 // Loader Animation
 window.addEventListener('load', () => {
     const loader = document.querySelector('.loader');
     const progress = document.querySelector('.progress');
-    
-    let width = 0;
+    let loadProgress = 0;
+
     const interval = setInterval(() => {
-        width += 1;
-        progress.style.width = width + '%';
-        if (width >= 100) {
+        loadProgress += 1;
+        progress.style.width = `${loadProgress}%`;
+        
+        if (loadProgress >= 100) {
             clearInterval(interval);
+            
+            // Fade out loader
             gsap.to(loader, {
                 opacity: 0,
                 duration: 1,
-                onComplete: () => loader.style.display = 'none'
+                onComplete: () => {
+                    loader.style.display = 'none';
+                    // Start page animations
+                    initPageAnimations();
+                }
             });
         }
     }, 20);
 });
 
-// GSAP Animations
-gsap.registerPlugin(ScrollTrigger);
+function initPageAnimations() {
+    // Hero Section Animation
+    const heroTimeline = gsap.timeline();
+    
+    heroTimeline
+        .to('.hero-content h1', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power3.out'
+        })
+        .to('.hero-content p', {
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out'
+        }, '-=0.5')
+        .to('.location-badge', {
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.out'
+        }, '-=0.5');
 
-// Hero Section Animation
-gsap.from('.hero-content h1', {
-    y: 100,
-    opacity: 0,
-    duration: 1,
-    delay: 0.5
-});
-
-gsap.from('.hero-content p', {
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    delay: 0.8
-});
-
-// Work Items Animation
-document.querySelectorAll('.work-item').forEach(item => {
-    gsap.from(item, {
-        scrollTrigger: {
+    // Work Items Animation
+    document.querySelectorAll('.work-item').forEach((item, index) => {
+        gsap.set(item, { opacity: 0, y: 50 });
+        
+        ScrollTrigger.create({
             trigger: item,
             start: 'top center+=100',
-            toggleActions: 'play none none reverse'
-        },
-        y: 100,
-        opacity: 0,
-        duration: 1
+            onEnter: () => {
+                gsap.to(item, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: 'power3.out'
+                });
+            },
+            once: true
+        });
     });
-});
+}
 
-// Mobile Menu Toggle
-const menuToggle = document.querySelector('.menu-toggle');
-const navLinks = document.querySelector('.nav-links');
-
-menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    menuToggle.classList.toggle('active');
+// Smooth Scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            gsap.to(window, {
+                duration: 1,
+                scrollTo: target,
+                ease: 'power3.inOut'
+            });
+        }
+    });
 });
