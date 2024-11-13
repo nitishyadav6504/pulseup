@@ -169,13 +169,15 @@ nav {
 }
 
 .hero-text {
-    max-width: 800px;
+    position: relative;
+    z-index: 1;
 }
 
 .hero-text h1 {
-    font-size: 5rem;
-    line-height: 1.1;
-    margin-bottom: 2rem;
+    font-size: 7vw;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
 }
 
 .hero-text p {
@@ -230,11 +232,15 @@ nav {
 
 .work-grid {
     display: grid;
-    gap: 5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2vw;
+    padding: 0 2vw;
 }
 
 .work-item {
+    aspect-ratio: 4/5;
     position: relative;
+    overflow: hidden;
 }
 
 .work-image {
@@ -416,4 +422,60 @@ footer {
     .contact-header h2 {
         font-size: 3rem;
     }
+}
+
+/* Smooth black background gradient overlay for hero */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 0;
+}
+
+/* Add magnetic effect to buttons */
+.magnetic-button {
+    position: relative;
+    display: inline-block;
+    padding: 1.5rem 3rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+/* Add hover overlay for work items */
+.work-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.work-item:hover::after {
+    opacity: 1;
+}
+
+/* Update scroll animations */
+[data-scroll] {
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+[data-scroll="in"] {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-scroll="out"] {
+    opacity: 0;
+    transform: translateY(100px);
 }
